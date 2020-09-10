@@ -8,18 +8,18 @@ html(lang="en")
     meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
     link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
     link(rel="stylesheet", href="/stylesheets/style.css")
-    title Sandbox: #{title}
+    title Puzzle Solver: #{title}
   body
     div.top-bar.d-flex.flex-column.flex-md-row.align-items-center.p-3.px-md-4.mb-3.bg-white.border-bottom.box-shadow
       h5.my-0.mr-md-auto.font-weight-normal
-        a(href="/", title="Expresso") Sandbox
+        a(href="/", title="Expresso") Puzzle Solver
       nav.my-2.my-md-0.mr-md-3
         a.p-2.text-dark(href="/", title="Home") Home
 
         if !user
           a.p-2.text-dark(href="/login") Log In
         else
-          a.p-2.text-dark(href="/puzzle") Puzzle Solver
+          a.p-2.text-dark(href="/puzzle") Puzzles
           form(method="POST",action="/logout")
             button.p-2.text-dark(type="submit",  action="/logout") Logout
     .container
