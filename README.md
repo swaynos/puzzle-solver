@@ -1,6 +1,8 @@
 # puzzle-solver
 A tool to solve jigsaw puzzles using Node/Express on AWS
 
+## Prerequisites
+- This repo uses Docker and a Dockerfile to self-host this Node application as well as a dynamoDB instance
 ## Getting Started
 1. Clone the git repo locally
 1. Ensure you have the correct Node.js version installed(specified in [.nvmrc](.nvmrc))
@@ -11,5 +13,4 @@ A tool to solve jigsaw puzzles using Node/Express on AWS
     - OKTA_CLIENT_SECRET=
     - OKTA_TOKEN=
 1. ```echo -e "\rAPP_SECRET=`uuid`" >> .env``` to generate a unique APP_SECRET
-1. ```npm install``` to install depedencies
-1. ```npm start``` to watch files
+1. ```docker-compose up``` to run the Node application and local dynamoDB
