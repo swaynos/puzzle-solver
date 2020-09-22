@@ -24,7 +24,7 @@ const puzzleTableItem = {
     }
 };
 
-const deploy = async () => {
+const deploy = () => {
     // Create the DynamoDB service object
     let dynamodb = new AWS.DynamoDB();
 
