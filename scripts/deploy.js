@@ -14,46 +14,36 @@ const puzzleTableParams = {
         WriteCapacityUnits: 5
     }
 };
-const puzzleTableItem = {
-    TableName: 'Puzzle',
-    Item: {
-        id: {N: '1'},
-        owner : {S: 'me'},
-        name : {S: 'Foobar'},
-        numberOfPieces : {N: '7'},
-    }
-};
+const puzzleTableItem = new PuzzleModel('me', 'Foobar', 7);
 
-const deploy = () => {
+const deploy = async () => {
     // Create the DynamoDB service object
     let dynamodb = new AWS.DynamoDB();
 
     console.log('creating table');
-    let puzzleTablePromise = createTable(dynamodb, puzzleTableParams);
-
-    puzzleTablePromise.then(() => {
-        putItem(dynamodb, puzzleTableItem);
-    });
+    await createTableAsync(dynamodb, puzzleTableParams);
+    puzzleTableItem.id = 1;
+    await putItemAsync(dynamodb, puzzleTableItem.toParams());
 }
 
-function createTable(dynamodb, params) {
+async function createTableAsync(dynamodb, params) {
     // ToDo: Manage logging using winston
-    let createTablePromise = dynamodb.createTable(params).promise();
-    createTablePromise.then((data) => {
-        console.log('created table.', JSON.stringify(data, null, 2));
-    }).catch(function(err) {
-        consolellog.error('Error JSON.', JSON.stringify(err, null, 2));
-    });
-    return createTablePromise;
+    try {
+        let response = await dynamodb.createTable(params).promise();
+        console.log('created table.', JSON.stringify(response, null, 2));
+    }
+    catch (err) {
+        console.error('Error JSON.', JSON.stringify(err, null, 2));
+    }
 }
 
-function putItem(dynamodb, params) {
-    let putItemPromise = dynamodb.putItem(params).promise();
-    putItemPromise.then((data) => {
-        console.log("Created data.", JSON.stringify(data, null, 2));
-    }).catch(function(err) {
+async function putItemAsync(dynamodb, params) {
+    try {
+        let response = await dynamodb.putItem(params).promise();
+        console.log("Created data.", JSON.stringify(response, null, 2));
+    }
+    catch (err) {
         console.error("Error JSON.", JSON.stringify(err, null, 2));
-    });
-    return putItemPromise;
+    }
 }
 exports.deploy = deploy;
