@@ -1,20 +1,29 @@
+const AWS = require('aws-sdk');
 const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const path = require('path');
 const session = require('express-session');
+// ToDo: Provide session store https://github.com/expressjs/session/issues/556
 
 const auth = require('./auth');
-
 const indexRouter = require('./routes/index');
 const registerRouter = require('./routes/register');
-const puzzleRouter = require('./routes/puzzle');
+const puzzleRouter = require('./routes/puzzleController');
 
 // App initialization
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// AWS config
+AWS.config.update({
+    region: 'local',
+    endpoint: 'http://dynamodb-local:8000'
+//   accessKeyId: "any", //process.env.AWS_ACCESS_KEY_ID,
+//   secretAccessKey: "any" //process.env.AWS_SECRET_ACCESS_KEY
+});
 
 // Middleware
 app.use(logger('dev'));
@@ -29,22 +38,7 @@ app.use(session({
 }));
 
 app.use(auth.oidc.router);
-// Tack a user object onto each request if possible
-function addUser(req, res, next) { // ToDo: move out to middleware.js
-  const { userContext } = req;
-  if (!userContext) {
-    return next();
-  }
- 
-  auth.oktaClient.getUser(userContext.userinfo.sub)
-  .then(user => {
-    res.locals.user = user;
-    next();
-  }).catch(err => {
-    next(err);
-  });
-};
-app.use(addUser);
+app.use(auth.addUserToRes);
 
 // Routes
 app.use('/', indexRouter);
@@ -64,5 +58,9 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Deploy development assets to dynamodb
+if (app.get('env') === 'development') {
+  require('./scripts/deploy').deploy();
+}
 
 module.exports = app;

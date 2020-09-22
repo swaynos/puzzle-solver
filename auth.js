@@ -22,4 +22,20 @@ const oidc = new ExpressOIDC({
   }
 });
 
-module.exports = { oidc, oktaClient };
+// Tack a okta user object onto each response if possible
+const addUserToRes = function(req, res, next) { 
+  const { userContext } = req;
+  if (!userContext) {
+    return next();
+  }
+
+  oktaClient.getUser(oktaId).getUser(userContext.userinfo.sub)
+    .then(user => {
+    res.locals.user = user;
+    next();
+    }).catch(err => {
+    next(err);
+  });
+};
+
+module.exports = { addUserToRes, oidc, oktaClient };
