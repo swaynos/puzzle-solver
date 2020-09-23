@@ -2,15 +2,29 @@ const AWS = require('aws-sdk');
 const PuzzleModel = require('../models/puzzleModel');
 
 class PuzzleService {
-    constructor(dynamodb) {
-        this.dynamodb = dynamodb;
+    constructor(dynamodb, ddbDocumentClient) {
+        if (!!dynamodb) {
+            this.dynamodb = dynamodb;
+        }
+        else {
+            this.dynamodb = new AWS.DynamoDB();
+        }
+        if (!!ddbDocumentClient) {
+            this.ddbDocumentClient = ddbDocumentClient;
+        }
+        else {
+            this.ddbDocumentClient = new AWS.DynamoDB.DocumentClient();
+        }
+        this._tableName = 'Puzzle';
         this._puzzleTableParams = {
-            TableName : 'Puzzle',
+            TableName : this._tableName,
             KeySchema : [
-                { AttributeName: 'id', KeyType: 'HASH' }
+                { AttributeName: 'owner', KeyType: 'HASH' },
+                { AttributeName: 'name', KeyType: 'RANGE' }
             ],
             AttributeDefinitions: [
-                { AttributeName: 'id', AttributeType: 'N' }
+                { AttributeName: 'owner', AttributeType: 'S' },
+                { AttributeName: 'name', AttributeType: 'S' }
             ],
             ProvisionedThroughput: {
                 ReadCapacityUnits: 5,
@@ -19,11 +33,24 @@ class PuzzleService {
         };
     }
 
-    async list(user) {
-        let model = new PuzzleModel();
-        return [
-            model
-        ];
+    async listAsync(user) {
+        // "owner" is a reserved keywoard
+        // https://dynobase.dev/dynamodb-errors/validationexception-invalid-keyconditionexpression-attribute-name-is-a-reserved-keyword/
+        let params = {
+            KeyConditionExpression: '#puzzle_owner = :owner',
+            ExpressionAttributeValues: {
+                ':owner': 'me'
+            },
+            TableName: this._tableName,
+            ExpressionAttributeNames: { '#puzzle_owner': 'owner' }
+        };
+        try {
+            let result = await this.ddbDocumentClient.query(params).promise();
+            return result;
+        }
+        catch (err) {
+            console.error("Error JSON.", JSON.stringify(err, null, 2));
+        }
     }
     
     async putItemAsync(puzzleModel) {

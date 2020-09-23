@@ -8,9 +8,7 @@ const deploy = async () => {
 
     let puzzleTableItem = new PuzzleModel('me', 'Foobar', 7);
 
-    console.log('creating table');
     await service.createPuzzleTableAsync();
-    puzzleTableItem.id = 1;
     await service.putItemAsync(puzzleTableItem);
 }
 exports.deploy = deploy;

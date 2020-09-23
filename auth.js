@@ -29,7 +29,7 @@ const addUserToRes = function(req, res, next) {
     return next();
   }
 
-  oktaClient.getUser(oktaId).getUser(userContext.userinfo.sub)
+  oktaClient.getUser(userContext.userinfo.sub)
     .then(user => {
     res.locals.user = user;
     next();
