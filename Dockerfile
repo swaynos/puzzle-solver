@@ -1,7 +1,6 @@
 FROM node:10-alpine
 RUN mkdir -p /puzzle-solver-app
 WORKDIR /puzzle-solver-app
-COPY . .
+COPY package*.json ./
 RUN npm install
-EXPOSE 3000
-CMD [ "npm", "start" ]
+COPY . .

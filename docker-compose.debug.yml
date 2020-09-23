@@ -12,9 +12,13 @@ services:
     container_name: puzzle-solver-app
     ports:
       - "3000:3000"
+      - "9229:9229"
+    expose:
+      - 9229
     volumes:
       - .:/puzzle-solver-app 
     environment:
+      NODE_ENV: 'development'
       AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
       AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'
-    command: npm start
+    command: npm run debug
