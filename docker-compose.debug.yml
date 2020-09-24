@@ -7,6 +7,7 @@ services:
       - "8000:8000"
   puzzle-solver:
     build: .
+    env_file: .env
     depends_on:
       - dynamodb-local
     container_name: puzzle-solver-app

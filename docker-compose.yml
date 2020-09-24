@@ -7,13 +7,16 @@ services:
       - "8000:8000"
   puzzle-solver:
     build: .
+    env_file: .env
+    # If this is the "production" compose, do we need to depend on dynamodb-local?
     depends_on:
       - dynamodb-local
     container_name: puzzle-solver-app
     ports:
       - "3000:3000"
     volumes:
-      - .:/puzzle-solver-app 
+      - .:/puzzle-solver-app
+    # Test if these work on top of the env_file
     environment:
       AWS_ACCESS_KEY_ID: 'DUMMYIDEXAMPLE'
       AWS_SECRET_ACCESS_KEY: 'DUMMYEXAMPLEKEY'

@@ -8,7 +8,8 @@
             "type": "node",
             "request": "attach",
             "name": "Docker: Attach to Puzzle Solver",
-            "remoteRoot": "/puzzle-solver-app"
+            "remoteRoot": "/puzzle-solver-app",
+            "restart": true
         }
     ]
 }
