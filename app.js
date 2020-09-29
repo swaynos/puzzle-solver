@@ -7,8 +7,8 @@ const session = require('express-session');
 // ToDo: Provide session store https://github.com/expressjs/session/issues/556
 
 const auth = require('./auth');
-const indexRouter = require('./routes/index');
-const registerRouter = require('./routes/register');
+const indexRouter = require('./routes/indexController');
+const registerRouter = require('./routes/registerController');
 const puzzleRouter = require('./routes/puzzleController');
 
 // App initialization
@@ -19,6 +19,7 @@ app.set('view engine', 'pug');
 
 // AWS config
 AWS.config.update({
+    // ToDo: Move to env config
     region: 'local',
     endpoint: 'http://dynamodb-local:8000'
 //   accessKeyId: "any", //process.env.AWS_ACCESS_KEY_ID,

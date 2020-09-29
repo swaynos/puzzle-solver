@@ -4,7 +4,6 @@ const router = express.Router();
 
 // Home page
 router.get('/', async (req, res) => {
-  // const { userContext } = req; // ToDo: Remove
   res.render('index');
 });
 

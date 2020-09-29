@@ -1,5 +1,19 @@
-
 extends layout
 
+block variables
+  - var title = "Register"
+
 block content
-    h1.foo-class This is Registration
+    h1.foo-class Register a New User
+    form(method="post")
+        each field in fields
+            - var cssClass = "form-control"
+            if field.error
+                - var cssClass = cssClass + " is-invalid"
+            .form-group
+                label #{field.label}
+                input(required, name=field.name, type=field.type, value=field.value, class=cssClass)
+                .invalid-feedback #{field.error}
+        button.btn.btn-primary(type="submit") Register
+
+                
