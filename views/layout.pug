@@ -12,20 +12,26 @@ html(lang="en")
     link(rel="stylesheet", href="/stylesheets/style.css")
     title Puzzle Solver: #{title}
   body
-    header
-      div.navbar.navbar-dark.bg-dark.shadow-sm.d-flex.flex-column.flex-md-row.align-items-center.p-3.px-md-4.mb-3
-          a.navbar-brand.my-0.mr-md-auto(href="/", title="Home")
-            include logo.pug
-            strong Puzzle Solver
-          if user
-            nav.my-2.my-md-0.mr-md-3
-              a.p-2.text-light(href="/puzzle") Puzzles
-              //- ToDo: Introduce other nav-items here
-          if !user
-            a.btn.btn-outline-light(href="/login") Log In
-          else
-            form(method="POST",action="/logout")
-              button.btn.btn-outline-light(type="submit",  action="/logout") Logout
+    .navbar.navbar-dark.bg-dark.shadow-sm.d-flex.flex-column.flex-md-row.align-items-center.p-3.px-md-4.mb-3
+        a.navbar-brand.my-0.mr-md-auto(href="/", title="Home")
+          include logo.pug
+          strong Puzzle Solver
+        if !user
+          nav.my-2.my-md-0.mr-md-3
+            a.p-2.text-light(href="/register") Register
+        else
+          nav.my-2.my-md-0.mr-md-3
+            a.p-2.text-light(href="/puzzle") Puzzles
+            //- ToDo: Introduce other nav-items here
+        if !user
+          a.btn.btn-outline-light(href="/login") Log In
+        else
+          form(method="POST",action="/logout")
+            button.btn.btn-outline-light(type="submit",  action="/logout") Logout
+
+    if headerName
+      header.px-3.py-3.pt-md-5.pb-md-4.mx-auto(class=headerName)
+        block header
     .container
       block content
 
