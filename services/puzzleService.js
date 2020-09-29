@@ -32,21 +32,37 @@ class PuzzleService {
             }
         };
     }
+    async getPuzzle(puzzleName, userId) {
+        let params = {
+            TableName: this._tableName,
+            Key: {
+                "owner": userId,
+                "name": puzzleName
+            }
+        }
+        try {
+            let result = await this.ddbDocumentClient.get(params).promise();
+            return result.Item;
+        }
+        catch (err) {
+            console.error("Error JSON.", JSON.stringify(err, null, 2));
+        }
+    }
 
-    async listAsync(user) {
+    async listAsync(userId) {
         // "owner" is a reserved keywoard
         // https://dynobase.dev/dynamodb-errors/validationexception-invalid-keyconditionexpression-attribute-name-is-a-reserved-keyword/
         let params = {
             KeyConditionExpression: '#puzzle_owner = :owner',
             ExpressionAttributeValues: {
-                ':owner': 'me'
+                ':owner': userId
             },
             TableName: this._tableName,
             ExpressionAttributeNames: { '#puzzle_owner': 'owner' }
         };
         try {
             let result = await this.ddbDocumentClient.query(params).promise();
-            return result;
+            return result.Items;
         }
         catch (err) {
             console.error("Error JSON.", JSON.stringify(err, null, 2));

@@ -6,7 +6,7 @@ const deploy = async () => {
     const dynamodb = new AWS.DynamoDB();
     const service = new PuzzleService(dynamodb);
 
-    let puzzleTableItem = new PuzzleModel('me', 'Foobar', 7);
+    let puzzleTableItem = new PuzzleModel('00uufbzr7GHSsHsJF4x6', 'Foobar', 500);
 
     await service.createPuzzleTableAsync();
     await service.putItemAsync(puzzleTableItem);

@@ -12,7 +12,24 @@ block header
     | laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in 
     | voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 block content
-  .row
-    .offset-sm-2.col-sm-8
-      .jumbotron.text-center.
-        Puzzle Puzzle Puzzle
+  .card-deck.mb3.text-center
+    each puzzle in puzzles
+      - var puzzleLink = "/puzzle/edit/" + puzzle.name;
+      .card.mb-4.box-shadow
+        .card-header
+          .my-0.font-weight-normal #{puzzle.name}
+        .card-body
+          h1.card-title.pricing-card-title #{puzzle.numberOfPieces} 
+            small.text-muted pcs
+          ul.list-unstyled.mt-3.mb-4
+            li Continue solving #{puzzle.name}
+          a.btn.btn-lg.btn-block.btn-outline-primary(href=puzzleLink) Continue
+    .card.mb-4.box-shadow
+      .card-header
+        .my-0.font-weight-normal New Puzzle
+      .card-body
+        h1.card-title.pricing-card-title ? 
+          small.text-muted pcs
+        ul.list-unstyled.mt-3.mb-4
+          li Solve a new puzzle
+        a.btn.btn-lg.btn-block.btn-primary(href="#new") Solve New Puzzle

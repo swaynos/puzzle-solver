@@ -8,6 +8,10 @@ footer {
   margin-top: 1em;
 }
 
-.header-home, .header-puzzle {
+.header-home, .header-puzzle, .header-edit-puzzle {
   max-width: 700px;
+}
+
+.card-deck .card {
+  min-width: 220px;
 }
